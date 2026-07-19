@@ -1,0 +1,6 @@
+streamlit
+pandas
+joblib
+scikit-learn
+numpy
+google-cloud-translate
