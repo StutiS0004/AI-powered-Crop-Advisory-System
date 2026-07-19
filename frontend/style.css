@@ -1,0 +1,110 @@
+/* Overall page */
+html, body, [class*="css"]  {
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+.block-container {
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 1100px;
+}
+
+/* Navbar row visibility */
+[data-testid="stHorizontalBlock"] {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    visibility: visible !important;
+}
+
+/* Ensure selectbox is visible and properly sized */
+.stSelectbox {
+    visibility: visible !important;
+    display: block !important;
+    min-width: 150px;
+}
+
+/* Main title */
+h1 {
+    color: #1f2937;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+/* Subtitles */
+h2, h3 {
+    color: #374151;
+    font-weight: 600;
+}
+
+/* Paragraph text */
+p, li, label {
+    color: #4b5563;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Input labels and boxes */
+.stTextInput label,
+.stSelectbox label,
+.stNumberInput label,
+.stDateInput label {
+    font-weight: 600;
+    color: #374151;
+}
+
+div[data-baseweb="input"],
+div[data-baseweb="select"] {
+    border-radius: 10px;
+}
+
+/* Buttons */
+.stButton > button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    width: 100%;
+}
+
+.stButton > button:hover {
+    background: #1d4ed8;
+    color: white;
+}
+
+/* Success/info/warning boxes */
+div[data-testid="stAlert"] {
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+}
+
+/* Expanders */
+.streamlit-expanderHeader {
+    font-weight: 600;
+    color: #374151;
+    border-radius: 10px;
+}
+
+/* Tables */
+.dataframe {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background: #f9fafb;
+}
+
+/* Hide Streamlit default footer/menu */
+#MainMenu {
+    visibility: hidden;
+}
+footer {
+    visibility: hidden;
+}
