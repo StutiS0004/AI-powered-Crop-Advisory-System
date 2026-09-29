@@ -49,25 +49,75 @@ def get_soil_by_pincode(pincode):
 
 
 def get_weather_by_district(district, state, planting_date, season):
-    import random
-    if season == "Kharif":
-        return {"max_temp": 30 + random.randint(-2, 2), "min_temp": 24 + random.randint(-2, 2), "rainfall": 50 + random.randint(-20, 20)}
-    elif season == "Rabi":
-        return {"max_temp": 26 + random.randint(-2, 2), "min_temp": 16 + random.randint(-2, 2), "rainfall": 5 + random.randint(-3, 3)}
-    return {"max_temp": 35 + random.randint(-2, 2), "min_temp": 26 + random.randint(-2, 2), "rainfall": 10 + random.randint(-5, 5)}
+    """
+    Returns mock weather values for the current project demo.
 
+    These keys must match the ML model feature requirements:
+    temperature, humidity, rainfall.
+    """
+
+    import random
+
+    if season == "Kharif":
+        return {
+            "temperature": 25 + random.randint(-2, 2),
+            "humidity": 82 + random.randint(-5, 5),
+            "rainfall": 220 + random.randint(-30, 30),
+        }
+
+    elif season == "Rabi":
+        return {
+            "temperature": 21 + random.randint(-2, 2),
+            "humidity": 62 + random.randint(-5, 5),
+            "rainfall": 55 + random.randint(-15, 15),
+        }
+
+    else:  # Zaid
+        return {
+            "temperature": 30 + random.randint(-2, 2),
+            "humidity": 70 + random.randint(-5, 5),
+            "rainfall": 80 + random.randint(-20, 20),
+        }
 
 def get_expected_yield(crop, land_acres):
+    """
+    Expected yield (kg) per crop, extended for all 22 model crops.
+    Values are approximate; adjust as needed for your project report.
+    """
+
     yield_per_acre = {
+        # Cereals / millets
         "rice": 2500,
-        "wheat": 2000,
         "maize": 3000,
-        "pulses": 800,
+        # Pulses / legumes
+        "chickpea": 1200,
+        "kidneybeans": 1000,
+        "pigeonpeas": 900,
+        "mothbeans": 700,
+        "mungbean": 800,
+        "blackgram": 800,
+        "lentil": 1000,
+        # Fruits
+        "pomegranate": 6000,
+        "banana": 25000,
+        "mango": 8000,
+        "orange": 12000,
+        "apple": 10000,
+        "grapes": 10000,
+        "watermelon": 12000,
+        "muskmelon": 10000,
+        "papaya": 15000,
+        "coconut": 6000,
+        # Cash / others
         "cotton": 600,
-        "sugarcane": 40000,
-        "vegetables": 5000,
+        "jute": 1500,
+        "coffee": 800,
     }
+
+    # Default yield if crop not listed (should not happen with your model)
     base_yield = yield_per_acre.get(crop, 2000)
+
+    # Small land tends to be more intensive per acre
     if land_acres < 1:
         adjustment = 1.2
     elif land_acres < 2.5:
@@ -76,32 +126,83 @@ def get_expected_yield(crop, land_acres):
         adjustment = 1.0
     else:
         adjustment = 0.95
+
     return base_yield * land_acres * adjustment
 
-
 def get_market_price(crop):
+    """
+    Approximate market price (₹ per kg) for each of the 22 crops.
+    These are indicative values; adjust for your project report if needed.
+    """
+
     prices = {
+        # Cereals / millets
         "rice": 35,
-        "wheat": 30,
         "maize": 20,
-        "pulses": 80,
-        "cotton": 60,
-        "sugarcane": 4,
-        "vegetables": 40,
+        # Pulses / legumes
+        "chickpea": 60,
+        "kidneybeans": 70,
+        "pigeonpeas": 65,
+        "mothbeans": 70,
+        "mungbean": 70,
+        "blackgram": 70,
+        "lentil": 65,
+        # Fruits
+        "pomegranate": 60,
+        "banana": 30,
+        "mango": 50,
+        "orange": 40,
+        "apple": 80,
+        "grapes": 60,
+        "watermelon": 15,
+        "muskmelon": 20,
+        "papaya": 20,
+        "coconut": 25,
+        # Cash / others
+        "cotton": 60,      # per kg of lint (simplified)
+        "jute": 25,        # per kg of fibre (simplified)
+        "coffee": 250,     # per kg of beans (very rough)
     }
+
+    # Default price if crop not listed
     return prices.get(crop, 30)
 
-
 def get_harvest_time(crop):
+    """
+    Approximate days from sowing to harvest for each of the 22 crops.
+    Values are indicative; adjust for your project report if needed.
+    """
+
     days = {
+        # Cereals / millets
         "rice": 120,
-        "wheat": 100,
         "maize": 90,
-        "pulses": 80,
+        # Pulses / legumes
+        "chickpea": 100,
+        "kidneybeans": 90,
+        "pigeonpeas": 150,
+        "mothbeans": 75,
+        "mungbean": 75,
+        "blackgram": 75,
+        "lentil": 100,
+        # Fruits
+        "pomegranate": 150,
+        "banana": 365,
+        "mango": 365,
+        "orange": 365,
+        "apple": 365,
+        "grapes": 365,
+        "watermelon": 90,
+        "muskmelon": 90,
+        "papaya": 270,
+        "coconut": 365,
+        # Cash / others
         "cotton": 180,
-        "sugarcane": 365,
-        "vegetables": 60,
+        "jute": 120,
+        "coffee": 365,
     }
+
+    # Default duration if crop not listed
     return days.get(crop, 90)
 
 
@@ -164,8 +265,8 @@ def generate_explanation(crop, inputs):
 - Soil Type: {soil['soil_type']}
 
 **Weather Conditions:**
-- Temperature: {weather['max_temp']}°C
-- Minimum Temperature: {weather['min_temp']}°C
+- Temperature: {weather['temperature']}°C
+- Humidity: {weather['humidity']}%
 - Rainfall: {weather['rainfall']} mm
 
 **Your Constraints:**
@@ -218,36 +319,83 @@ def generate_risks(crop, inputs):
 
 
 def predict_crop(inputs):
-    try:
-        model_path = PROJECT_ROOT / "models" / "crop_recommendator.pkl"
-        model = joblib.load(model_path)
-        soil = inputs["soil"]
-        weather = inputs["weather"]
-        X = [[
-            soil["nitrogen"],
-            soil["phosphorus"],
-            soil["potassium"],
-            weather["max_temp"],
-            weather["min_temp"],
-            soil["pH"],
-            weather["rainfall"],
-        ]]
-        prediction = model.predict(X)[0]
-        crop = prediction
-    except:
-        crop = "rice"
+    """
+    Uses the saved Random Forest model to recommend crops.
+    """
 
-    crop = adjust_for_constraints(crop, inputs)
+    from pathlib import Path
+
+    # Absolute path to the model file we just verified
+    model_path = Path(
+        "/Users/stutisamanta/Desktop/Crop/AI-powered-Crop-Advisory-System/models/crop_recommendator.pkl"
+    )
+
+    if not model_path.exists():
+        raise FileNotFoundError(
+            f"Model not found at: {model_path}. "
+            "Make sure crop_recommendator.pkl exists in the models folder."
+        )
+
+    model = joblib.load(model_path)
+
+    soil = inputs["soil"]
+    weather = inputs["weather"]
+
+    # IMPORTANT: use the exact 7 features the model was trained with,
+    # in the same order and with the same names.
+    import pandas as pd
+
+    input_data = pd.DataFrame([[
+        soil["nitrogen"],
+        soil["phosphorus"],
+        soil["potassium"],
+        weather["temperature"],
+        weather["humidity"],
+        soil["pH"],
+        weather["rainfall"],
+    ]], columns=[
+        "N",
+        "P",
+        "K",
+        "temperature",
+        "humidity",
+        "ph",
+        "rainfall",
+    ])
+
+    # Main ML prediction
+    ml_crop = model.predict(input_data)[0]
+
+    # Probability for every crop
+    probabilities = model.predict_proba(input_data)[0]
+
+    crop_probabilities = pd.DataFrame({
+        "Crop": model.classes_,
+        "Confidence (%)": probabilities * 100,
+    })
+
+    # Top 3 recommendations
+    top_3 = crop_probabilities.sort_values(
+        by="Confidence (%)",
+        ascending=False,
+    ).head(3).reset_index(drop=True)
+
+    top_3["Confidence (%)"] = top_3["Confidence (%)"].round(2)
+
+    # Apply practical farm constraints after ML prediction.
+    final_crop = adjust_for_constraints(ml_crop, inputs)
 
     return {
-        "crop": crop,
-        "explanation": generate_explanation(crop, inputs),
-        "action_plan": generate_action_plan(crop, inputs),
-        "risks": generate_risks(crop, inputs),
-        "yield": f"{get_expected_yield(crop, inputs['land_acres']):.0f} kg",
-        "price": get_market_price(crop),
+        "crop": final_crop,
+        "original_ml_crop": ml_crop,
+        "confidence": float(top_3.iloc[0]["Confidence (%)"]),
+        "top_3": top_3,
+        "explanation": generate_explanation(final_crop, inputs),
+        "action_plan": generate_action_plan(final_crop, inputs),
+        "risks": generate_risks(final_crop, inputs),
+        "yield": f"{get_expected_yield(final_crop, inputs['land_acres']):.0f} kg",
+        "price": get_market_price(final_crop),
     }
-
 
 def get_translate_client():
     if translate is None:
@@ -712,9 +860,14 @@ if pincode and district:
             }))
 
             st.subheader(f"🌦️ Expected Weather for {planting_date.strftime('%d %B %Y')}")
+
             st.table(pd.DataFrame({
-                "Parameter": ["Max Temperature", "Min Temperature", "Rainfall"],
-                "Value": [f"{weather['max_temp']}°C", f"{weather['min_temp']}°C", f"{weather['rainfall']} mm"],
+                "Parameter": ["Temperature", "Humidity", "Rainfall"],
+                "Value": [
+                    f"{weather['temperature']}°C",
+                    f"{weather['humidity']}%",
+                    f"{weather['rainfall']} mm",
+                ],
             }))
         except Exception as e:
             st.error(f"❌ Error fetching data: {e}")
